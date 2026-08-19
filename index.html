@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍌 Hacer Pedido - Frutas y Verduras</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 { text-align: center; color: #2d3748; font-size: 32px; font-weight: 900; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #718096; font-size: 18px; margin-bottom: 20px; }
+
+        /* Banner de estado del ciclo */
+        .banner {
+            border-radius: 15px;
+            padding: 16px 20px;
+            margin-bottom: 25px;
+            font-weight: 700;
+            text-align: center;
+            font-size: 16px;
+            display: none;
+        }
+        .banner.abierto {
+            background: #f0fff4;
+            border: 3px solid #48bb78;
+            color: #22543d;
+            display: block;
+        }
+        .banner.cerrado {
+            background: #fff5f5;
+            border: 3px solid #f56565;
+            color: #742a2a;
+            display: block;
+        }
+
+        .section { margin-bottom: 30px; }
+        .section-title { font-size: 22px; font-weight: 700; color: #2d3748; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .icon { font-size: 28px; }
+
+        .producto-card {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .producto-card.selected { border-color: #48bb78; background: #f0fff4; }
+        .producto-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .producto-nombre { font-size: 20px; font-weight: 700; color: #2d3748; }
+        .producto-precio { font-size: 22px; font-weight: 900; color: #48bb78; }
+
+        .cantidad-control { display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .btn-cantidad {
+            width: 50px; height: 50px; border-radius: 50%; border: none;
+            background: #667eea; color: white; font-size: 28px; font-weight: 900;
+            cursor: pointer; transition: all 0.2s ease;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .btn-cantidad:active { transform: scale(0.9); }
+        .cantidad-display { font-size: 32px; font-weight: 900; color: #2d3748; min-width: 60px; text-align: center; }
+
+        .input-field {
+            width: 100%; padding: 18px; font-size: 18px; border: 3px solid #e2e8f0;
+            border-radius: 12px; font-family: 'Nunito', sans-serif; margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        .input-field:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1); }
+
+        .radio-group { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 15px; }
+        .radio-option { flex: 1; min-width: 150px; }
+        .radio-option input[type="radio"] { display: none; }
+        .radio-label {
+            display: block; padding: 18px; background: #f7fafc; border: 3px solid #e2e8f0;
+            border-radius: 12px; text-align: center; font-size: 18px; font-weight: 700;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .radio-option input[type="radio"]:checked + .radio-label { background: #667eea; color: white; border-color: #667eea; }
+
+        .btn-enviar {
+            width: 100%; padding: 22px;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white; border: none; border-radius: 15px; font-size: 24px; font-weight: 900;
+            cursor: pointer; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(72, 187, 120, 0.3);
+        }
+        .btn-enviar:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(72, 187, 120, 0.4); }
+        .btn-enviar:disabled { background: #cbd5e0; cursor: not-allowed; box-shadow: none; transform: none; }
+
+        .resumen {
+            background: linear-gradient(135deg, #fef5e7 0%, #fdebd0 100%);
+            padding: 20px; border-radius: 15px; margin-top: 30px; border: 3px solid #f39c12;
+        }
+        .resumen-title { font-size: 22px; font-weight: 900; color: #e67e22; margin-bottom: 15px; }
+        .resumen-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 18px; }
+        .resumen-total {
+            font-size: 28px; font-weight: 900; color: #e67e22; border-top: 3px solid #e67e22;
+            padding-top: 15px; margin-top: 15px; display: flex; justify-content: space-between;
+        }
+
+        .exito-mensaje {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
+            background: white; padding: 40px; border-radius: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            text-align: center; z-index: 1000; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        .exito-mensaje.show { transform: translate(-50%, -50%) scale(1); }
+        .exito-icono { font-size: 80px; margin-bottom: 20px; }
+        .exito-texto { font-size: 24px; font-weight: 700; color: #2d3748; margin-bottom: 10px; }
+
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); display: none; z-index: 999;
+        }
+        .overlay.show { display: block; }
+
+        @media (max-width: 600px) {
+            .container { padding: 20px; }
+            h1 { font-size: 28px; }
+            .radio-group { flex-direction: column; }
+            .radio-option { min-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍌 Hacer Pedido</h1>
+        <p class="subtitle">Frutas y Verduras Frescas</p>
+
+        <!-- Banner: se llena solo al cargar la página -->
+        <div class="banner" id="banner"></div>
+
+        <form id="pedidoForm">
+            <div class="section">
+                <div class="section-title"><span class="icon">🛒</span> Seleccione sus productos</div>
+
+                <div class="producto-card" data-producto="Banano" data-precio="1080">
+                    <div class="producto-header">
+                        <span class="producto-nombre">🍌 Banano</span>
+                        <span class="producto-precio">₡1,080</span>
+                    </div>
+                    <div class="cantidad-control">
+                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Banano', -1)">-</button>
+                        <span class="cantidad-display" id="cant-Banano">0</span>
+                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Banano', 1)">+</button>
+                    </div>
+                </div>
+
+                <div class="producto-card" data-producto="Papa" data-precio="780">
+                    <div class="producto-header">
+                        <span class="producto-nombre">🥔 Papa</span>
+                        <span class="producto-precio">₡780/kg</span>
+                    </div>
+                    <div class="cantidad-control">
+                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Papa', -1)">-</button>
+                        <span class="cantidad-display" id="cant-Papa">0</span>
+                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Papa', 1)">+</button>
+                    </div>
+                </div>
+
+                <div class="producto-card" data-producto="Aguacate" data-precio="700">
+                    <div class="producto-header">
+                        <span class="producto-nombre">🥑 Aguacate</span>
+                        <span class="producto-precio">₡700</span>
+                    </div>
+                    <div class="cantidad-control">
+                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Aguacate', -1)">-</button>
+                        <span class="cantidad-display" id="cant-Aguacate">0</span>
+                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Aguacate', 1)">+</button>
+                    </div>
+                </div>
+
+                <div class="producto-card" data-producto="Tomate" data-precio="1160">
+                    <div class="producto-header">
+                        <span class="producto-nombre">🍅 Tomate</span>
+                        <span class="producto-precio">₡1,160/kg</span>
+                    </div>
+                    <div class="cantidad-control">
+                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Tomate', -1)">-</button>
+                        <span class="cantidad-display" id="cant-Tomate">0</span>
+                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Tomate', 1)">+</button>
+                    </div>
+                </div>
+
+                <div class="producto-card" data-producto="Lechuga" data-precio="560">
+                    <div class="producto-header">
+                        <span class="producto-nombre">🥬 Lechuga</span>
+                        <span class="producto-precio">₡560</span>
+                    </div>
+                    <div class="cantidad-control">
+                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Lechuga', -1)">-</button>
+                        <span class="cantidad-display" id="cant-Lechuga">0</span>
+                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Lechuga', 1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title"><span class="icon">👤</span> Sus datos</div>
+
+                <input type="text" class="input-field" id="nombre" placeholder="Su nombre completo" required>
+                <input type="tel" class="input-field" id="telefono" placeholder="Teléfono (ej: 8888-8888)" required>
+
+                <div class="section-title" style="font-size: 18px; margin-top: 20px;">Tipo de cliente</div>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="tipoCliente" value="Casa" id="tipoCasa" checked>
+                        <label for="tipoCasa" class="radio-label">🏠 Casa</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="tipoCliente" value="Edificio" id="tipoEdificio">
+                        <label for="tipoEdificio" class="radio-label">🏢 Edificio</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="tipoCliente" value="Negocio" id="tipoNegocio">
+                        <label for="tipoNegocio" class="radio-label">🏪 Negocio</label>
+                    </div>
+                </div>
+
+                <input type="text" class="input-field" id="direccion" placeholder="Dirección completa" required>
+
+                <div class="section-title" style="font-size: 18px; margin-top: 20px;">Horario de entrega preferido</div>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="horario" value="8:00-10:00 AM" id="h1" checked>
+                        <label for="h1" class="radio-label">🌅 Mañana<br>8-10 AM</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="horario" value="10:00-12:00 PM" id="h2">
+                        <label for="h2" class="radio-label">☀️ Media mañana<br>10-12 PM</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="horario" value="2:00-4:00 PM" id="h3">
+                        <label for="h3" class="radio-label">🌤️ Tarde<br>2-4 PM</label>
+                    </div>
+                </div>
+
+                <div class="section-title" style="font-size: 18px; margin-top: 20px;">Método de pago</div>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="metodoPago" value="Efectivo" id="pago1" checked>
+                        <label for="pago1" class="radio-label">💵 Efectivo</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="metodoPago" value="SINPE" id="pago2">
+                        <label for="pago2" class="radio-label">📱 SINPE</label>
+                    </div>
+                </div>
+                <p style="font-size: 14px; color: #718096; text-align: center; margin-top: -8px;">
+                    💡 El pago se hace cuando le entreguemos su pedido
+                </p>
+            </div>
+
+            <div class="resumen">
+                <div class="resumen-title">📋 Resumen de su pedido</div>
+                <div id="itemsResumen"></div>
+                <div class="resumen-total"><span>TOTAL:</span><span id="totalPedido">₡0</span></div>
+            </div>
+
+            <button type="submit" class="btn-enviar" id="btnEnviar">✅ ENVIAR PEDIDO</button>
+        </form>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="exito-mensaje" id="exitoMensaje">
+        <div class="exito-icono">✅</div>
+        <div class="exito-texto">¡Pedido enviado con éxito!</div>
+        <p>Le contactaremos pronto para confirmar</p>
+    </div>
+
+    <script>
+        // 🔗 Pegar acá la URL del Google Apps Script (Implementar → Nueva implementación → Aplicación web)
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzhS8nB0CW1cWViwgQ6JkQDgxpzKFYMZxQE-2iTZpRjHjSPw0opicCTaXh-PqyT6y0C/exec';
+
+        const cantidades = { 'Banano': 0, 'Papa': 0, 'Aguacate': 0, 'Tomate': 0, 'Lechuga': 0 };
+        const precios = { 'Banano': 1080, 'Papa': 780, 'Aguacate': 700, 'Tomate': 1160, 'Lechuga': 560 };
+
+        let pedidosAbiertos = true; // Por defecto permite intentar enviar si no se pudo verificar
+
+        function cambiarCantidad(producto, cambio) {
+            cantidades[producto] = Math.max(0, cantidades[producto] + cambio);
+            document.getElementById(`cant-${producto}`).textContent = cantidades[producto];
+            const card = document.querySelector(`[data-producto="${producto}"]`);
+            card.classList.toggle('selected', cantidades[producto] > 0);
+            actualizarResumen();
+        }
+
+        function actualizarResumen() {
+            const resumenDiv = document.getElementById('itemsResumen');
+            let html = '';
+            let total = 0;
+            for (let producto in cantidades) {
+                if (cantidades[producto] > 0) {
+                    const subtotal = cantidades[producto] * precios[producto];
+                    total += subtotal;
+                    html += `<div class="resumen-item"><span>${producto} x${cantidades[producto]}</span><span>₡${subtotal.toLocaleString('es-CR')}</span></div>`;
+                }
+            }
+            resumenDiv.innerHTML = html || '<p style="text-align:center; color:#999;">No hay productos seleccionados</p>';
+            document.getElementById('totalPedido').textContent = `₡${total.toLocaleString('es-CR')}`;
+        }
+
+        // Al cargar la página: preguntarle al script si hay un ciclo abierto
+        function verificarCicloAbierto() {
+            const banner = document.getElementById('banner');
+            const btn = document.getElementById('btnEnviar');
+
+            fetch(SCRIPT_URL)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.abierto) {
+                        pedidosAbiertos = true;
+                        banner.className = 'banner abierto';
+                        banner.textContent = data.cierre
+                            ? `✅ Pedidos abiertos — cierra el ${data.cierre}`
+                            : '✅ Pedidos abiertos';
+                        btn.disabled = false;
+                    } else {
+                        pedidosAbiertos = false;
+                        banner.className = 'banner cerrado';
+                        banner.textContent = '⛔ No hay pedidos disponibles en este momento. Volvé a intentar cuando anunciemos la próxima ronda.';
+                        btn.disabled = true;
+                    }
+                })
+                .catch(() => {
+                    // No se pudo verificar (ej. problema de red). Dejamos intentar enviar igual;
+                    // el sistema lo valida también del lado del servidor.
+                    banner.style.display = 'none';
+                });
+        }
+
+        document.getElementById('pedidoForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            if (!pedidosAbiertos) {
+                alert('⛔ No hay pedidos disponibles en este momento.');
+                return;
+            }
+
+            const hayProductos = Object.values(cantidades).some(c => c > 0);
+            if (!hayProductos) {
+                alert('⚠️ Por favor seleccione al menos un producto');
+                return;
+            }
+
+            const nombre = document.getElementById('nombre').value;
+            const direccion = document.getElementById('direccion').value;
+            const tipoCliente = document.querySelector('input[name="tipoCliente"]:checked').value;
+            const horario = document.querySelector('input[name="horario"]:checked').value;
+            const metodoPago = document.querySelector('input[name="metodoPago"]:checked').value;
+
+            const productosPedidos = [];
+            for (let producto in cantidades) {
+                if (cantidades[producto] > 0) {
+                    productosPedidos.push({
+                        producto, cantidad: cantidades[producto],
+                        precio: precios[producto],
+                        subtotal: cantidades[producto] * precios[producto]
+                    });
+                }
+            }
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Necesario para evitar bloqueo CORS de Apps Script
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ nombre, direccion, tipoCliente, horario, metodoPago, productos: productosPedidos })
+            })
+            .then(() => {
+                document.getElementById('overlay').classList.add('show');
+                document.getElementById('exitoMensaje').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('overlay').classList.remove('show');
+                    document.getElementById('exitoMensaje').classList.remove('show');
+                    document.getElementById('pedidoForm').reset();
+                    for (let prod in cantidades) {
+                        cantidades[prod] = 0;
+                        document.getElementById(`cant-${prod}`).textContent = '0';
+                        document.querySelector(`[data-producto="${prod}"]`).classList.remove('selected');
+                    }
+                    actualizarResumen();
+                }, 3000);
+            })
+            .catch(() => alert('Hubo un error al enviar el pedido. Intentá de nuevo.'));
+        });
+
+        verificarCicloAbierto();
+        actualizarResumen();
+    </script>
+</body>
+</html>
