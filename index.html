@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🍌 Hacer Pedido - Frutas y Verduras</title>
+    <title>Hacer Pedido - Frutas y Verduras</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -51,8 +51,7 @@
         }
 
         .section { margin-bottom: 30px; }
-        .section-title { font-size: 22px; font-weight: 700; color: #2d3748; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        .icon { font-size: 28px; }
+        .section-title { font-size: 22px; font-weight: 700; color: #2d3748; margin-bottom: 15px; }
 
         .producto-card {
             background: #f7fafc;
@@ -120,7 +119,6 @@
             text-align: center; z-index: 1000; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
         .exito-mensaje.show { transform: translate(-50%, -50%) scale(1); }
-        .exito-icono { font-size: 80px; margin-bottom: 20px; }
         .exito-texto { font-size: 24px; font-weight: 700; color: #2d3748; margin-bottom: 10px; }
 
         .overlay {
@@ -139,7 +137,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>🍌 Hacer Pedido</h1>
+        <h1>Hacer Pedido</h1>
         <p class="subtitle">Frutas y Verduras Frescas</p>
 
         <!-- Banner: se llena solo al cargar la página -->
@@ -147,88 +145,29 @@
 
         <form id="pedidoForm">
             <div class="section">
-                <div class="section-title"><span class="icon">🛒</span> Seleccione sus productos</div>
-
-                <div class="producto-card" data-producto="Banano" data-precio="1080">
-                    <div class="producto-header">
-                        <span class="producto-nombre">🍌 Banano</span>
-                        <span class="producto-precio">₡1,080</span>
-                    </div>
-                    <div class="cantidad-control">
-                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Banano', -1)">-</button>
-                        <span class="cantidad-display" id="cant-Banano">0</span>
-                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Banano', 1)">+</button>
-                    </div>
-                </div>
-
-                <div class="producto-card" data-producto="Papa" data-precio="780">
-                    <div class="producto-header">
-                        <span class="producto-nombre">🥔 Papa</span>
-                        <span class="producto-precio">₡780/kg</span>
-                    </div>
-                    <div class="cantidad-control">
-                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Papa', -1)">-</button>
-                        <span class="cantidad-display" id="cant-Papa">0</span>
-                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Papa', 1)">+</button>
-                    </div>
-                </div>
-
-                <div class="producto-card" data-producto="Aguacate" data-precio="700">
-                    <div class="producto-header">
-                        <span class="producto-nombre">🥑 Aguacate</span>
-                        <span class="producto-precio">₡700</span>
-                    </div>
-                    <div class="cantidad-control">
-                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Aguacate', -1)">-</button>
-                        <span class="cantidad-display" id="cant-Aguacate">0</span>
-                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Aguacate', 1)">+</button>
-                    </div>
-                </div>
-
-                <div class="producto-card" data-producto="Tomate" data-precio="1160">
-                    <div class="producto-header">
-                        <span class="producto-nombre">🍅 Tomate</span>
-                        <span class="producto-precio">₡1,160/kg</span>
-                    </div>
-                    <div class="cantidad-control">
-                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Tomate', -1)">-</button>
-                        <span class="cantidad-display" id="cant-Tomate">0</span>
-                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Tomate', 1)">+</button>
-                    </div>
-                </div>
-
-                <div class="producto-card" data-producto="Lechuga" data-precio="560">
-                    <div class="producto-header">
-                        <span class="producto-nombre">🥬 Lechuga</span>
-                        <span class="producto-precio">₡560</span>
-                    </div>
-                    <div class="cantidad-control">
-                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Lechuga', -1)">-</button>
-                        <span class="cantidad-display" id="cant-Lechuga">0</span>
-                        <button type="button" class="btn-cantidad" onclick="cambiarCantidad('Lechuga', 1)">+</button>
-                    </div>
-                </div>
+                <div class="section-title">Selecciona tus productos</div>
+                <div id="productosContainer"></div>
             </div>
 
             <div class="section">
-                <div class="section-title"><span class="icon">👤</span> Sus datos</div>
+                <div class="section-title">Tus datos</div>
 
-                <input type="text" class="input-field" id="nombre" placeholder="Su nombre completo" required>
+                <input type="text" class="input-field" id="nombre" placeholder="Tu nombre completo" required>
                 <input type="tel" class="input-field" id="telefono" placeholder="Teléfono (ej: 8888-8888)" required>
 
                 <div class="section-title" style="font-size: 18px; margin-top: 20px;">Tipo de cliente</div>
                 <div class="radio-group">
                     <div class="radio-option">
                         <input type="radio" name="tipoCliente" value="Casa" id="tipoCasa" checked>
-                        <label for="tipoCasa" class="radio-label">🏠 Casa</label>
+                        <label for="tipoCasa" class="radio-label">Casa</label>
                     </div>
                     <div class="radio-option">
                         <input type="radio" name="tipoCliente" value="Edificio" id="tipoEdificio">
-                        <label for="tipoEdificio" class="radio-label">🏢 Edificio</label>
+                        <label for="tipoEdificio" class="radio-label">Edificio</label>
                     </div>
                     <div class="radio-option">
                         <input type="radio" name="tipoCliente" value="Negocio" id="tipoNegocio">
-                        <label for="tipoNegocio" class="radio-label">🏪 Negocio</label>
+                        <label for="tipoNegocio" class="radio-label">Negocio</label>
                     </div>
                 </div>
 
@@ -238,15 +177,15 @@
                 <div class="radio-group">
                     <div class="radio-option">
                         <input type="radio" name="horario" value="8:00-10:00 AM" id="h1" checked>
-                        <label for="h1" class="radio-label">🌅 Mañana<br>8-10 AM</label>
+                        <label for="h1" class="radio-label">Mañana<br>8-10 AM</label>
                     </div>
                     <div class="radio-option">
                         <input type="radio" name="horario" value="10:00-12:00 PM" id="h2">
-                        <label for="h2" class="radio-label">☀️ Media mañana<br>10-12 PM</label>
+                        <label for="h2" class="radio-label">Media mañana<br>10-12 PM</label>
                     </div>
                     <div class="radio-option">
                         <input type="radio" name="horario" value="2:00-4:00 PM" id="h3">
-                        <label for="h3" class="radio-label">🌤️ Tarde<br>2-4 PM</label>
+                        <label for="h3" class="radio-label">Tarde<br>2-4 PM</label>
                     </div>
                 </div>
 
@@ -254,48 +193,94 @@
                 <div class="radio-group">
                     <div class="radio-option">
                         <input type="radio" name="metodoPago" value="Efectivo" id="pago1" checked>
-                        <label for="pago1" class="radio-label">💵 Efectivo</label>
+                        <label for="pago1" class="radio-label">Efectivo</label>
                     </div>
                     <div class="radio-option">
                         <input type="radio" name="metodoPago" value="SINPE" id="pago2">
-                        <label for="pago2" class="radio-label">📱 SINPE</label>
+                        <label for="pago2" class="radio-label">SINPE</label>
                     </div>
                 </div>
                 <p style="font-size: 14px; color: #718096; text-align: center; margin-top: -8px;">
-                    💡 El pago se hace cuando le entreguemos su pedido
+                    El pago se hace cuando te entreguemos tu pedido
                 </p>
             </div>
 
             <div class="resumen">
-                <div class="resumen-title">📋 Resumen de su pedido</div>
+                <div class="resumen-title">Resumen de tu pedido</div>
                 <div id="itemsResumen"></div>
                 <div class="resumen-total"><span>TOTAL:</span><span id="totalPedido">₡0</span></div>
             </div>
 
-            <button type="submit" class="btn-enviar" id="btnEnviar">✅ ENVIAR PEDIDO</button>
+            <button type="submit" class="btn-enviar" id="btnEnviar">ENVIAR PEDIDO</button>
         </form>
     </div>
 
     <div class="overlay" id="overlay"></div>
     <div class="exito-mensaje" id="exitoMensaje">
-        <div class="exito-icono">✅</div>
         <div class="exito-texto">¡Pedido enviado con éxito!</div>
-        <p>Le contactaremos pronto para confirmar</p>
+        <p>Te contactaremos pronto para confirmar</p>
     </div>
 
     <script>
-        // 🔗 Pegar acá la URL del Google Apps Script (Implementar → Nueva implementación → Aplicación web)
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzhS8nB0CW1cWViwgQ6JkQDgxpzKFYMZxQE-2iTZpRjHjSPw0opicCTaXh-PqyT6y0C/exec';
+        // Pegar acá la URL del Google Apps Script (Implementar → Nueva implementación → Aplicación web)
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPr0Qs5AP5_hIoQk5HdcquWKVjj2hUC6pmpJ-RkOZav6-9QTGO803QvX88OvCjvaw/exec';
 
-        const cantidades = { 'Banano': 0, 'Papa': 0, 'Aguacate': 0, 'Tomate': 0, 'Lechuga': 0 };
-        const precios = { 'Banano': 1080, 'Papa': 780, 'Aguacate': 700, 'Tomate': 1160, 'Lechuga': 560 };
+        let cantidades = {};
+        let precios = {};
 
         let pedidosAbiertos = true; // Por defecto permite intentar enviar si no se pudo verificar
 
+        function formatoPrecio(valor) {
+            return '₡' + Number(valor).toLocaleString('es-CR');
+        }
+
+        function formatoUnidad(unidad) {
+            if (unidad === 'kg' || unidad === 'mano' || unidad === 'unidad') {
+                return '/' + unidad;
+            }
+            return '';
+        }
+
+        function renderCatalogo(catalogo) {
+            const cont = document.getElementById('productosContainer');
+            cantidades = {};
+            precios = {};
+            cont.innerHTML = '';
+
+            catalogo.forEach(function (item) {
+                cantidades[item.producto] = 0;
+                precios[item.producto] = item.precio;
+
+                const card = document.createElement('div');
+                card.className = 'producto-card';
+                card.setAttribute('data-producto', item.producto);
+                card.innerHTML =
+                    '<div class="producto-header">' +
+                        '<span class="producto-nombre">' + item.producto + '</span>' +
+                        '<span class="producto-precio">' + formatoPrecio(item.precio) + formatoUnidad(item.unidad) + '</span>' +
+                    '</div>' +
+                    '<div class="cantidad-control">' +
+                        '<button type="button" class="btn-cantidad" data-delta="-1">-</button>' +
+                        '<span class="cantidad-display">0</span>' +
+                        '<button type="button" class="btn-cantidad" data-delta="1">+</button>' +
+                    '</div>';
+                cont.appendChild(card);
+            });
+        }
+
+        document.getElementById('productosContainer').addEventListener('click', function (e) {
+            const btn = e.target.closest('.btn-cantidad');
+            if (!btn) return;
+            const card = btn.closest('.producto-card');
+            const producto = card.getAttribute('data-producto');
+            const cambio = parseInt(btn.getAttribute('data-delta'), 10);
+            cambiarCantidad(producto, cambio);
+        });
+
         function cambiarCantidad(producto, cambio) {
             cantidades[producto] = Math.max(0, cantidades[producto] + cambio);
-            document.getElementById(`cant-${producto}`).textContent = cantidades[producto];
-            const card = document.querySelector(`[data-producto="${producto}"]`);
+            const card = document.querySelector('[data-producto="' + producto + '"]');
+            card.querySelector('.cantidad-display').textContent = cantidades[producto];
             card.classList.toggle('selected', cantidades[producto] > 0);
             actualizarResumen();
         }
@@ -308,39 +293,44 @@
                 if (cantidades[producto] > 0) {
                     const subtotal = cantidades[producto] * precios[producto];
                     total += subtotal;
-                    html += `<div class="resumen-item"><span>${producto} x${cantidades[producto]}</span><span>₡${subtotal.toLocaleString('es-CR')}</span></div>`;
+                    html += '<div class="resumen-item"><span>' + producto + ' x' + cantidades[producto] + '</span><span>' + formatoPrecio(subtotal) + '</span></div>';
                 }
             }
             resumenDiv.innerHTML = html || '<p style="text-align:center; color:#999;">No hay productos seleccionados</p>';
-            document.getElementById('totalPedido').textContent = `₡${total.toLocaleString('es-CR')}`;
+            document.getElementById('totalPedido').textContent = formatoPrecio(total);
         }
 
-        // Al cargar la página: preguntarle al script si hay un ciclo abierto
+        // Al cargar la página: pedirle al script el estado del ciclo y el catálogo
         function verificarCicloAbierto() {
             const banner = document.getElementById('banner');
             const btn = document.getElementById('btnEnviar');
+            const cont = document.getElementById('productosContainer');
 
             fetch(SCRIPT_URL)
                 .then(r => r.json())
                 .then(data => {
+                    renderCatalogo(data.catalogo || []);
                     if (data.abierto) {
                         pedidosAbiertos = true;
                         banner.className = 'banner abierto';
                         banner.textContent = data.cierre
-                            ? `✅ Pedidos abiertos — cierra el ${data.cierre}`
-                            : '✅ Pedidos abiertos';
+                            ? 'Pedidos abiertos — cierra el ' + data.cierre
+                            : 'Pedidos abiertos';
                         btn.disabled = false;
                     } else {
                         pedidosAbiertos = false;
                         banner.className = 'banner cerrado';
-                        banner.textContent = '⛔ No hay pedidos disponibles en este momento. Volvé a intentar cuando anunciemos la próxima ronda.';
+                        banner.textContent = 'No hay pedidos disponibles en este momento. Vuelve a intentar cuando anunciemos la próxima ronda.';
                         btn.disabled = true;
                     }
+                    actualizarResumen();
                 })
                 .catch(() => {
-                    // No se pudo verificar (ej. problema de red). Dejamos intentar enviar igual;
-                    // el sistema lo valida también del lado del servidor.
+                    // No se pudo cargar el catálogo (ej. problema de red).
+                    pedidosAbiertos = false;
                     banner.style.display = 'none';
+                    cont.innerHTML = '<p style="text-align:center; color:#999;">No se pudo cargar el catálogo. Recarga la página.</p>';
+                    btn.disabled = true;
                 });
         }
 
@@ -348,17 +338,18 @@
             e.preventDefault();
 
             if (!pedidosAbiertos) {
-                alert('⛔ No hay pedidos disponibles en este momento.');
+                alert('No hay pedidos disponibles en este momento.');
                 return;
             }
 
             const hayProductos = Object.values(cantidades).some(c => c > 0);
             if (!hayProductos) {
-                alert('⚠️ Por favor seleccione al menos un producto');
+                alert('Por favor selecciona al menos un producto');
                 return;
             }
 
             const nombre = document.getElementById('nombre').value;
+            const telefono = document.getElementById('telefono').value;
             const direccion = document.getElementById('direccion').value;
             const tipoCliente = document.querySelector('input[name="tipoCliente"]:checked').value;
             const horario = document.querySelector('input[name="horario"]:checked').value;
@@ -367,11 +358,7 @@
             const productosPedidos = [];
             for (let producto in cantidades) {
                 if (cantidades[producto] > 0) {
-                    productosPedidos.push({
-                        producto, cantidad: cantidades[producto],
-                        precio: precios[producto],
-                        subtotal: cantidades[producto] * precios[producto]
-                    });
+                    productosPedidos.push({ producto, cantidad: cantidades[producto] });
                 }
             }
 
@@ -379,7 +366,7 @@
                 method: 'POST',
                 mode: 'no-cors', // Necesario para evitar bloqueo CORS de Apps Script
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({ nombre, direccion, tipoCliente, horario, metodoPago, productos: productosPedidos })
+                body: JSON.stringify({ nombre, telefono, direccion, tipoCliente, horario, metodoPago, productos: productosPedidos })
             })
             .then(() => {
                 document.getElementById('overlay').classList.add('show');
@@ -388,19 +375,19 @@
                     document.getElementById('overlay').classList.remove('show');
                     document.getElementById('exitoMensaje').classList.remove('show');
                     document.getElementById('pedidoForm').reset();
-                    for (let prod in cantidades) {
-                        cantidades[prod] = 0;
-                        document.getElementById(`cant-${prod}`).textContent = '0';
-                        document.querySelector(`[data-producto="${prod}"]`).classList.remove('selected');
+                    for (let producto in cantidades) {
+                        cantidades[producto] = 0;
+                        const card = document.querySelector('[data-producto="' + producto + '"]');
+                        card.querySelector('.cantidad-display').textContent = '0';
+                        card.classList.remove('selected');
                     }
                     actualizarResumen();
                 }, 3000);
             })
-            .catch(() => alert('Hubo un error al enviar el pedido. Intentá de nuevo.'));
+            .catch(() => alert('Hubo un error al enviar el pedido. Inténtalo de nuevo.'));
         });
 
         verificarCicloAbierto();
-        actualizarResumen();
     </script>
 </body>
 </html>
